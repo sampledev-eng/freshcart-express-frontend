@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login</title>
-  <link rel="stylesheet" href="../styles.css" />
+  <link rel="stylesheet" href="src/styles.css" />
 </head>
 <body>
   <h1>Login</h1>
@@ -14,7 +14,7 @@
     <button type="submit">Login</button>
   </form>
   <p><a href="forgot-password.html">Forgot password?</a></p>
-  <script src="auth.js"></script>
+  <script src="src/auth/auth.js"></script>
   <script>
     document.getElementById('loginForm').onsubmit = e => {
       e.preventDefault();
@@ -28,6 +28,6 @@
       }
     };
   </script>
-  <script src="../toast.js"></script>
+  <script src="src/toast.js"></script>
 </body>
 </html>
