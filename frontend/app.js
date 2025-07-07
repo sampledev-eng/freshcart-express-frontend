@@ -83,9 +83,7 @@ function closeModal() { $('#modal').classList.add('hidden'); }
 function addToCart(id) {
   const select = document.getElementById('variantSelect');
   const variant = select ? +select.value : null;
-  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-  cart.push({ id, variant });
-  localStorage.setItem('cart', JSON.stringify(cart));
+  cartAdd(id, variant);
   toast('Item added');
   closeModal();
 }
