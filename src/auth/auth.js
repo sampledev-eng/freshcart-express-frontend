@@ -22,7 +22,8 @@ function loginUrl() {
   if (match) {
     return match[1] + 'auth/login.html';
   }
-  return 'auth/login.html';
+  // default to an absolute path in case the current page isn't under /src/
+  return '/src/auth/login.html';
 }
 
 function requireAuth() {
