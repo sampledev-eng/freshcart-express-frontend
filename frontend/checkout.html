@@ -3,12 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Checkout - FreshCart Express</title>
+  <title>Checkout – FreshCart Express</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <h1>Checkout</h1>
+
   <form id="checkoutForm">
+    <!-- Step 1 – Shipping -->
     <div class="step" id="step1">
       <h2>Shipping</h2>
       <input type="text" id="address" placeholder="Address" required />
@@ -19,15 +21,31 @@
       </select>
       <button type="button" onclick="nextStep()">Next</button>
     </div>
+
+    <!-- Step 2 – Payment -->
     <div class="step hidden" id="step2">
       <h2>Payment</h2>
-      <input type="text" placeholder="Card Number" required />
+
+      <label>
+        <input type="radio" name="payment" value="card" checked
+               onclick="selectPayment('card')"> Card
+      </label>
+      <label>
+        <input type="radio" name="payment" value="cod"
+               onclick="selectPayment('cod')"> Cash&nbsp;on&nbsp;Delivery
+      </label>
+
+      <input type="text" id="cardNum" placeholder="Card Number" required />
       <input type="text" id="promo" placeholder="Promo code" />
+
       <p id="total">Total: $0.00</p>
+
       <button type="button" onclick="applyPromo()">Apply Code</button>
       <button type="button" onclick="prevStep()">Back</button>
       <button type="button" onclick="nextStep()">Next</button>
     </div>
+
+    <!-- Step 3 – Confirm -->
     <div class="step hidden" id="step3">
       <h2>Confirm</h2>
       <p>Review your order and submit.</p>
@@ -36,36 +54,55 @@
     </div>
   </form>
 
+  <!-- Scripts -->
   <script src="products.js"></script>
   <script src="cart.js"></script>
+  <script src="toast.js"></script>
+
   <script>
-    let currentStep = 1;
-    const cart = getCart();
+    /* ---------- state ---------- */
+    let currentStep   = 1;
+    let paymentMethod = 'card';
+
+    /* ---------- calculate total from cart ---------- */
+    const cart   = getCart();          // from cart.js
+    const totalEl = document.getElementById('total');
     let total = 0;
+
     cart.forEach(item => {
-      const product = products.find(p => p.id === item.id);
-      if(product){
-        const price = item.variant != null ? product.variants[item.variant].price : product.price;
+      const product = products.find(p => p.id === item.id);  // from products.js
+      if (product) {
+        const price = item.variant != null
+                      ? product.variants[item.variant].price
+                      : product.price;
         total += price * item.qty;
       }
     });
-    const totalEl = document.getElementById('total');
     totalEl.textContent = `Total: $${total.toFixed(2)}`;
-    function showStep(num) {
-      document.querySelectorAll('.step').forEach((el, idx) => {
-        el.classList.toggle('hidden', idx !== num - 1);
-      });
+
+    /* ---------- helpers ---------- */
+    function selectPayment(method) {
+      paymentMethod = method;
+      const cardInput = document.getElementById('cardNum');
+      if (method === 'cod') {
+        cardInput.classList.add('hidden');
+        cardInput.removeAttribute('required');
+      } else {
+        cardInput.classList.remove('hidden');
+        cardInput.setAttribute('required', '');
+      }
     }
-    function nextStep() {
-      currentStep++;
-      showStep(currentStep);
+
+    function showStep(n) {
+      document.querySelectorAll('.step').forEach((el, idx) =>
+        el.classList.toggle('hidden', idx !== n - 1)
+      );
     }
-    function prevStep() {
-      currentStep--;
-      showStep(currentStep);
-    }
+    function nextStep() { currentStep++; showStep(currentStep); }
+    function prevStep() { currentStep--; showStep(currentStep); }
+
     function applyPromo() {
-      const code = document.getElementById('promo').value.trim();
+      const code = document.getElementById('promo').value.trim().toUpperCase();
       if (code === 'SAVE10') {
         total *= 0.9;
         totalEl.textContent = `Total: $${total.toFixed(2)} (promo applied)`;
@@ -74,23 +111,40 @@
         toast('Invalid code');
       }
     }
+
+    /* ---------- form submit ---------- */
     document.getElementById('checkoutForm').onsubmit = e => {
       e.preventDefault();
-      toast('Order placed!');
-      localStorage.setItem('cart', '[]');
-      syncCart([]);
+
+      /* save order locally (demo) */
       const orders = JSON.parse(localStorage.getItem('orders') || '[]');
-      orders.push({ id: Date.now(), status: 'Pending' });
+      orders.push({ id: Date.now(), status: 'Pending', total });
       localStorage.setItem('orders', JSON.stringify(orders));
+
+      /* clear cart */
+      localStorage.setItem('cart', '[]');
+      syncCart([]);   // from cart.js
+
+      /* user feedback */
+      if (paymentMethod === 'cod') {
+        toast('Order placed! Pay cash on delivery.');
+      } else {
+        toast('Order placed!');
+      }
+
+      /* optional notification */
       if ('Notification' in window && Notification.permission === 'granted') {
         new Notification('FreshCart', { body: 'Thank you for your order!' });
       }
     };
+
+    /* request notification permission once */
     if ('Notification' in window && Notification.permission !== 'granted') {
       Notification.requestPermission();
     }
+
+    /* init */
     showStep(currentStep);
   </script>
-  <script src="toast.js"></script>
 </body>
 </html>
