@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notifications</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <h1>Notifications</h1>
+  <ul id="notes"></ul>
+  <script src="auth/auth.js"></script>
+  <script>
+    requireAuth();
+    const ul = document.getElementById('notes');
+    const notes = JSON.parse(localStorage.getItem('notifications') || '[]');
+    notes.forEach(n => {
+      const li = document.createElement('li');
+      li.textContent = n;
+      ul.appendChild(li);
+    });
+  </script>
+</body>
+</html>
