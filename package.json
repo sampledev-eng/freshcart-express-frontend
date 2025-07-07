@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "homepage": "https://ideal-space-waffle-69p4v7pq4wwpfr55v-5500.app.github.dev/",
   "scripts": {
-    "predeploy": "npm run build",   // optional – use if you ever add a build step
+    "predeploy": "npm run build",
     "deploy": "gh-pages -d ./frontend"
   },
   "devDependencies": {
