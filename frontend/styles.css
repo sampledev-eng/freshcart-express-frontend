@@ -414,6 +414,9 @@ body {
 .bottom-nav .material-icons {
   font-size: 1.4em;
 }
+.bottom-nav .emoji {
+  font-size: 1.4em;
+}
 .bottom-nav .nav-item span {
   font-size: 0.7em;
 }
