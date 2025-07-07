@@ -39,6 +39,15 @@ document.addEventListener('DOMContentLoaded', () => {
       document.body.classList.toggle('dark', toggle.checked);
     };
   }
-  window.addEventListener('online', () => document.getElementById('offline').classList.add('hidden'));
-  window.addEventListener('offline', () => document.getElementById('offline').classList.remove('hidden'));
+  const offline = document.getElementById('offline');
+  function updateOffline() {
+    if (!offline) return;
+    offline.classList.toggle('hidden', navigator.onLine);
+  }
+  updateOffline();
+  window.addEventListener('online', updateOffline);
+  window.addEventListener('offline', updateOffline);
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/frontend/sw.js').catch(() => {});
+  }
 });

@@ -21,7 +21,9 @@
     </div>
     <div class="step hidden" id="step2">
       <h2>Payment</h2>
-      <input type="text" placeholder="Card Number" required />
+      <label><input type="radio" name="payment" value="card" checked onclick="selectPayment('card')"> Card</label>
+      <label><input type="radio" name="payment" value="cod" onclick="selectPayment('cod')"> Cash on Delivery</label>
+      <input type="text" id="cardNum" placeholder="Card Number" required />
       <input type="text" id="promo" placeholder="Promo code" />
       <p id="total">Total: $0.00</p>
       <button type="button" onclick="applyPromo()">Apply Code</button>
@@ -38,9 +40,21 @@
 
   <script>
     let currentStep = 1;
+    let paymentMethod = 'card';
     let total = 50; // demo total
     const totalEl = document.getElementById('total');
     totalEl.textContent = `Total: $${total.toFixed(2)}`;
+    function selectPayment(method) {
+      paymentMethod = method;
+      const card = document.getElementById('cardNum');
+      if (method === 'cod') {
+        card.classList.add('hidden');
+        card.removeAttribute('required');
+      } else {
+        card.classList.remove('hidden');
+        card.setAttribute('required', '');
+      }
+    }
     function showStep(num) {
       document.querySelectorAll('.step').forEach((el, idx) => {
         el.classList.toggle('hidden', idx !== num - 1);
@@ -66,7 +80,11 @@
     }
     document.getElementById('checkoutForm').onsubmit = e => {
       e.preventDefault();
-      toast('Order placed!');
+      if (paymentMethod === 'cod') {
+        toast('Order placed! Pay cash on delivery.');
+      } else {
+        toast('Order placed!');
+      }
       if ('Notification' in window && Notification.permission === 'granted') {
         new Notification('FreshCart', { body: 'Thank you for your order!' });
       }
