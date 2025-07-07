@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FreshCart Express</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1 data-i18n="title">FreshCart Express</h1>
+    <input type="text" id="searchBar" placeholder="Search products" />
+    <div id="autocomplete" class="autocomplete-list hidden"></div>
+    <button id="voiceSearchBtn">🎤</button>
+    <button id="filterBtn" data-i18n="filters">Filters</button>
+    <select id="themeSelect">
+      <option value="default" selected>Default</option>
+      <option value="colorful">Colorful</option>
+    </select>
+    <select id="langSelect">
+      <option value="en">EN</option>
+      <option value="es">ES</option>
+    </select>
+    <a href="auth/profile.html" class="icon-link">👤</a>
+    <a href="checkout.html" class="icon-link">🛒</a>
+    <label><input type="checkbox" id="darkToggle"> Dark</label>
+  </header>
+
+  <div id="filterTags" class="tags"></div>
+
+  <div id="filterPanel" class="filter-panel hidden">
+    <h3 data-i18n="filterHeading">Filters</h3>
+    <select id="brandFilter"><option value="">All Brands</option></select>
+    <select id="categoryFilter"><option value="">All Categories</option></select>
+    <input type="number" id="minPrice" placeholder="Min price" />
+    <input type="number" id="maxPrice" placeholder="Max price" />
+    <label><input type="checkbox" id="inStock"> <span data-i18n="inStock">In stock</span></label>
+    <select id="sortBy">
+      <option value="">Sort</option>
+      <option value="priceAsc">Price Low-High</option>
+      <option value="priceDesc">Price High-Low</option>
+      <option value="popularity">Popularity</option>
+    </select>
+    <button id="applyFiltersBtn" data-i18n="apply">Apply</button>
+  </div>
+
+  <main>
+    <section id="productList" class="product-grid"></section>
+    <h2 id="recTitle" class="hidden">Recently Viewed</h2>
+    <section id="recommended" class="product-grid"></section>
+  </main>
+
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+      <span id="closeModal" class="close">&times;</span>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <div id="offline" class="offline hidden">You are offline</div>
+
+  <script src="auth/auth.js"></script>
+  <script src="products.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
