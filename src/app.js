@@ -39,6 +39,7 @@ function openModal(product) {
     <img src="${product.image}" alt="${product.name}" />
     <h2>${product.name}</h2>
     <p>${product.description}</p>
+    ${product.variants ? `<select id="variantSelect">${product.variants.map((v,i)=>`<option value="${i}">${v.label} - $${v.price.toFixed(2)}</option>`).join('')}</select>` : ''}
     <button onclick="addToCart(${product.id})">Add to cart</button>
     <h3>Leave a review</h3>
     <form id="reviewForm">
@@ -70,8 +71,10 @@ function openModal(product) {
 function closeModal() { $('#modal').classList.add('hidden'); }
 
 function addToCart(id) {
+  const select = document.getElementById('variantSelect');
+  const variant = select ? +select.value : null;
   const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-  cart.push(id);
+  cart.push({ id, variant });
   localStorage.setItem('cart', JSON.stringify(cart));
   toast('Item added');
   closeModal();
