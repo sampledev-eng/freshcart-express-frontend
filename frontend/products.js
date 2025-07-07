@@ -5,6 +5,8 @@ const products = [
     brand: 'FarmFresh',
     category: 'Fruits',
     price: 2.5,
+    mrp: 3.0,
+    eta: '2 hrs',
     variants: [
       { label: '500g', price: 2.5 },
       { label: '1kg', price: 4.5 }
@@ -20,6 +22,8 @@ const products = [
     brand: 'Tropico',
     category: 'Fruits',
     price: 1.2,
+    mrp: 1.5,
+    eta: '2 hrs',
     variants: [
       { label: '500g', price: 1.2 },
       { label: '1kg', price: 2.2 }
@@ -35,6 +39,8 @@ const products = [
     brand: 'VeggieFarm',
     category: 'Vegetables',
     price: 0.9,
+    mrp: 1.1,
+    eta: '3 hrs',
     variants: [
       { label: '500g', price: 0.9 },
       { label: '1kg', price: 1.6 }
@@ -50,6 +56,8 @@ const products = [
     brand: 'DairyBest',
     category: 'Dairy',
     price: 3.0,
+    mrp: 3.5,
+    eta: '1 hr',
     variants: [
       { label: '1L', price: 3.0 },
       { label: '2L', price: 5.5 }

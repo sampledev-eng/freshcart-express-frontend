@@ -36,11 +36,17 @@ function renderProducts(list) {
     } else {
       card.classList.add('in-stock');
     }
+    const discount = p.mrp ? Math.round((1 - p.price / p.mrp) * 100) : 0;
     card.innerHTML = `
+      ${discount > 0 ? `<span class="offer-tag">${discount}% OFF</span>` : ''}
       <img src="${p.image}" alt="${p.name}" onerror="this.onerror=null;this.src='https://via.placeholder.com/150'" />
       <h3>${p.name}</h3>
+      <div class="eta">${p.eta || ''}</div>
       <div class="card-footer">
-        <span>$${p.price.toFixed(2)}</span>
+        <div>
+          <span class="price">$${p.price.toFixed(2)}</span>
+          ${p.mrp ? `<span class="mrp">$${p.mrp.toFixed(2)}</span>` : ''}
+        </div>
         <button class="add-btn" ${p.stock > 0 ? '' : 'disabled'}>Add to Cart</button>
       </div>
     `;
@@ -62,6 +68,11 @@ function openModal(product) {
   $('#modalBody').innerHTML = `
     <img src="${product.image}" alt="${product.name}" onerror="this.onerror=null;this.src='https://via.placeholder.com/150'" />
     <h2>${product.name}</h2>
+    <div>
+      <span class="price">$${product.price.toFixed(2)}</span>
+      ${product.mrp ? `<span class="mrp">$${product.mrp.toFixed(2)}</span>` : ''}
+      <span class="eta">${product.eta || ''}</span>
+    </div>
     <p>${product.description}</p>
     ${product.variants ? `<select id="variantSelect">${product.variants.map((v,i)=>`<option value="${i}">${v.label} - $${v.price.toFixed(2)}</option>`).join('')}</select>` : ''}
     <button onclick="addToCart(${product.id})">Add to cart</button>
@@ -203,6 +214,15 @@ function showPromo() {
   };
 }
 
+function initBanner() {
+  if (document.getElementById('bannerSwiper')) {
+    new Swiper('#bannerSwiper', {
+      pagination: { el: '#bannerSwiper .swiper-pagination' },
+      autoplay: { delay: 3000 }
+    });
+  }
+}
+
 function showSkeletons() {
   const container = $('#productList');
   container.innerHTML = '';
@@ -254,6 +274,16 @@ window.onload = () => {
       };
     });
   }
+  const catCarousel = document.getElementById('catCarousel');
+  if (catCarousel) {
+    catCarousel.innerHTML = cats.map(c=>`<div class="cat-item" data-cat="${c}"><img src="https://via.placeholder.com/80?text=${encodeURIComponent(c.charAt(0))}" alt="${c}"><div>${c}</div></div>`).join('');
+    catCarousel.querySelectorAll('.cat-item').forEach(el=>{
+      el.onclick = () => {
+        document.getElementById('categoryFilter').value = el.dataset.cat;
+        applyFilters();
+      };
+    });
+  }
   const drawerDark = document.getElementById('drawerDarkToggle');
   if (drawerDark) {
     drawerDark.checked = localStorage.getItem('dark') === 'true';
@@ -270,5 +300,6 @@ window.onload = () => {
       toast('Location saved');
     };
   }
+  initBanner();
   showPromo();
 };

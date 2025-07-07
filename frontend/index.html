@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
 </head>
@@ -14,19 +15,19 @@
   <div class="frame page">
     <header class="frame header-frame">
       <div class="left-group">
-        <button id="menuBtn" class="icon-link">☰</button>
+        <button id="menuBtn" class="icon-link"><span class="material-icons">menu</span></button>
         <input type="text" id="pincodeInputHeader" class="pin-input" placeholder="Pincode" />
       </div>
       <div class="search-group">
         <input type="text" id="searchBar" placeholder="Search 18000+ products..." />
         <div id="autocomplete" class="autocomplete-list hidden"></div>
-        <button id="voiceSearchBtn">🎤</button>
+        <button id="voiceSearchBtn" class="icon-link"><span class="material-icons">mic</span></button>
       </div>
       <div class="brand">
         <img src="assets/logo.svg" alt="logo" class="logo" />
         <h1 data-i18n="title" class="header-title">FreshCart</h1>
       </div>
-      <a href="auth/login.html" id="profileIcon" class="icon-link">👤</a>
+      <a href="auth/login.html" id="profileIcon" class="icon-link"><span class="material-icons">account_circle</span></a>
     </header>
     <nav id="drawer" class="drawer">
       <button id="filterBtn" data-i18n="filters">Filters</button>
@@ -50,6 +51,19 @@
       <p class="hero-sub">Everything you need in one place</p>
       <a href="#productList" class="btn primary">Shop Now</a>
     </section>
+
+    <section class="banner-section">
+      <div class="swiper" id="bannerSwiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide"><img src="https://via.placeholder.com/600x200?text=Offer+1" alt="Offer 1"></div>
+          <div class="swiper-slide"><img src="https://via.placeholder.com/600x200?text=Offer+2" alt="Offer 2"></div>
+          <div class="swiper-slide"><img src="https://via.placeholder.com/600x200?text=Offer+3" alt="Offer 3"></div>
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+    </section>
+
+    <div id="catCarousel" class="cat-carousel"></div>
 
     <div id="filterTags" class="tags"></div>
 
