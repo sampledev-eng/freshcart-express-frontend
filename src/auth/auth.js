@@ -18,11 +18,13 @@ function getToken() {
 }
 
 function loginUrl() {
-  const match = location.pathname.match(/^(.*\/src\/)/);
-  if (match) {
-    return match[1] + 'auth/login.html';
+  const pathParts = location.pathname.split('/');
+  const srcIndex = pathParts.indexOf('src');
+  if (srcIndex !== -1) {
+    return (
+      '/' + pathParts.slice(0, srcIndex + 1).join('/') + '/auth/login.html'
+    );
   }
-  // default to an absolute path in case the current page isn't under /src/
   return '/src/auth/login.html';
 }
 
