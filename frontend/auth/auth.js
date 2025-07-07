@@ -17,14 +17,11 @@ function getToken() {
   return null;
 }
 
-  function loginUrl() {
-    const parts = location.pathname.split('/');
-    const idx = parts.indexOf('frontend');
-    if (idx !== -1) {
-      return '/' + parts.slice(1, idx + 1).join('/') + '/auth/login.html';
-    }
-    return 'auth/login.html';
-  }
+function loginUrl() {
+  // Always redirect to the root auth login page to avoid
+  // duplicated path segments like "auth/auth/login.html".
+  return '/auth/login.html';
+}
 
 function requireAuth() {
   if (!getToken()) {

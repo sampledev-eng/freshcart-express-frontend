@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register</title>
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+  <h1>Register</h1>
+  <form id="registerForm">
+    <input type="email" id="regEmail" placeholder="Email" required />
+    <input type="password" id="regPassword" placeholder="Password" required />
+    <button type="submit">Register</button>
+  </form>
+  <p><a href="login.html">Back to login</a></p>
+  <script src="../toast.js"></script>
+  <script>
+    document.getElementById('registerForm').onsubmit = e => {
+      e.preventDefault();
+      toast('Account created! (demo)');
+      window.location.href = 'login.html';
+    };
+  </script>
+</body>
+</html>
