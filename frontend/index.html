@@ -14,21 +14,28 @@
 <body>
   <div class="frame page">
     <header class="frame header-frame">
-      <div class="header-top">
+      <div class="header-row1">
         <button id="menuBtn" class="icon-link"><span class="material-icons">menu</span></button>
         <div class="brand">
           <img src="assets/logo.svg" alt="logo" class="logo" />
-          <h1 data-i18n="title" class="header-title">FreshCart</h1>
+          <h1 class="header-title">FreshCart</h1>
         </div>
-        <select id="locationSelect" class="location-select">
-          <option value="" selected>Select Location</option>
-          <option value="560001">Bengaluru</option>
-          <option value="110001">Delhi</option>
-        </select>
+        <div class="delivery-info">
+          <svg viewBox="0 0 24 24" class="icon"><path d="M13 2L3 14h7v8l10-12h-7z" stroke="currentColor" fill="none"/></svg>
+          <span>Delivery in 5 mins</span>
+        </div>
         <a href="auth/login.html" id="profileIcon" class="icon-link"><span class="material-icons">account_circle</span></a>
       </div>
-      <div class="search-group">
-        <input type="text" id="searchBar" placeholder="Search 18000+ products..." />
+      <div class="location-bar">
+        <span class="loc-icon">📍</span>
+        <div class="loc-text">
+          <div class="loc-title">Select Location</div>
+          <div class="loc-sub">Location helps us show availability</div>
+        </div>
+      </div>
+      <div class="search-wrapper">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchBar" placeholder="Search 18000+ products" />
         <div id="autocomplete" class="autocomplete-list hidden"></div>
         <button id="voiceSearchBtn" class="icon-link"><span class="material-icons">mic</span></button>
       </div>
@@ -118,7 +125,7 @@
 
     <nav class="bottom-nav">
       <a href="index.html" class="nav-item"><span class="emoji">🏠</span><span>Home</span></a>
-      <a href="#" class="nav-item"><span class="emoji">📂</span><span>Categories</span></a>
+      <a href="#" id="categoriesTab" class="nav-item"><span class="emoji">📂</span><span>Categories</span></a>
       <a href="#searchBar" class="nav-item"><span class="emoji">🔍</span><span>Search</span></a>
       <a href="#" class="nav-item"><span class="emoji">🏷️</span><span>Offers</span></a>
       <a href="cart.html" class="nav-item"><span class="emoji">🛒</span><span>Cart</span></a>
@@ -132,6 +139,15 @@
   <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
   <script src="app.js"></script>
   <script src="main.js"></script>
+  <script type="module" src="ui.js"></script>
+  <aside id="categorySheet" class="category-sheet">
+    <div class="sheet-header">
+      <span>SHOP BY CATEGORY</span>
+      <button id="closeCategorySheet">&times;</button>
+    </div>
+    <ul id="categoryList" class="category-list"></ul>
+  </aside>
+  <div id="catBackdrop" class="sheet-backdrop"></div>
   <nav id="sideMenu" role="navigation" aria-label="Main menu">
     <div class="menu-header">
       <a href="auth/login.html" class="menu-item" tabindex="0">Login / Signup</a>
