@@ -3,6 +3,7 @@
   --accent: #ff9800;
   --bg: #f7f7f7;
   --text: #333;
+  --header-bg: #fff;
 }
 .frame {
   display: flex;
@@ -11,17 +12,18 @@
   width: 100%;
 }
 .header-frame {
-  background: var(--primary);
-  color: white;
-  padding: 0.5rem;
+  background: var(--header-bg);
+  color: var(--text);
+  padding: 0.25rem 0.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: nowrap;
   gap: 10px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   position: relative;
   width: 100%;
+  border-bottom: 1px solid #e0e0e0;
 }
 .brand { display:flex; align-items:center; gap:5px; }
 .left-group { display:flex; align-items:center; gap:5px; }
@@ -49,6 +51,37 @@
   display:inline-block;
 }
 .btn.primary { background: var(--accent); color:#fff; }
+.banner-section {
+  width: 100%;
+  max-width: 600px;
+  margin: 1rem auto;
+}
+.banner-section img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.cat-carousel {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  padding: 0 10px;
+  margin-bottom: 1rem;
+}
+.cat-item {
+  flex: 0 0 auto;
+  text-align: center;
+  font-size: 0.9em;
+  color: var(--text);
+}
+.cat-item img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-bottom: 4px;
+  background: #fff;
+  border: 1px solid #ddd;
+}
 .dark-toggle { display:flex; align-items:center; }
 .colorful {
   --primary: linear-gradient(45deg,#ff6b6b,#f7b733);
@@ -83,6 +116,7 @@ body {
   margin: 0 5px;
   font-size: 1.4em;
   text-decoration: none;
+  color: var(--text);
 }
 .pin-input {
   width: 80px;
@@ -124,6 +158,7 @@ body {
   text-align: center;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 .product-card:hover {
   transform: scale(1.02);
@@ -133,6 +168,16 @@ body {
   width: 100%;
   height: auto;
   border-radius: 6px;
+}
+.offer-tag {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: var(--accent);
+  color: #fff;
+  padding: 2px 4px;
+  font-size: 0.75em;
+  border-radius: 3px;
 }
 .product-card button {
   background: var(--accent);
@@ -153,6 +198,9 @@ body {
   align-items: center;
   gap: 10px;
 }
+.price { font-weight: 600; }
+.mrp { text-decoration: line-through; color: #777; font-size: 0.9em; }
+.eta { font-size: 0.8em; color: #555; }
 .skeleton {
   background: linear-gradient(90deg, #eee 25%, #ddd 37%, #eee 63%);
   background-size: 400% 100%;
