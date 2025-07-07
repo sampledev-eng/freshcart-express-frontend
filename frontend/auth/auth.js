@@ -17,16 +17,14 @@ function getToken() {
   return null;
 }
 
-function loginUrl() {
-  const pathParts = location.pathname.split('/');
-  const srcIndex = pathParts.indexOf('src');
-  if (srcIndex !== -1) {
-    return (
-      '/' + pathParts.slice(0, srcIndex + 1).join('/') + '/auth/login.html'
-    );
+  function loginUrl() {
+    const parts = location.pathname.split('/');
+    const idx = parts.indexOf('frontend');
+    if (idx !== -1) {
+      return '/' + parts.slice(1, idx + 1).join('/') + '/auth/login.html';
+    }
+    return 'auth/login.html';
   }
-  return '/src/auth/login.html';
-}
 
 function requireAuth() {
   if (!getToken()) {
