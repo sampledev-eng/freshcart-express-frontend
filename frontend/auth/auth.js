@@ -23,9 +23,79 @@ function loginUrl() {
   return '/auth/login.html';
 }
 
+function updateNavbarUser() {
+  const name = localStorage.getItem('userName');
+  const userEl = document.getElementById('navUser');
+  const iconEl = document.getElementById('loginIcon');
+  if (!userEl || !iconEl) return;
+  if (getToken() && name) {
+    userEl.textContent = name;
+    userEl.classList.remove('hidden');
+    iconEl.classList.add('hidden');
+  } else {
+    userEl.classList.add('hidden');
+    iconEl.classList.remove('hidden');
+  }
+}
+
+function showLoginForm() {
+  const modal = document.getElementById('modal');
+  if (!modal) { window.location.href = loginUrl(); return; }
+  document.getElementById('modalBody').innerHTML = `
+    <h2>Login</h2>
+    <form id="loginForm">
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <button type="submit">Login</button>
+    </form>
+    <p>New user? <a href="#" id="regLink">Register here</a></p>
+  `;
+  modal.classList.remove('hidden');
+  document.getElementById('loginForm').onsubmit = e => {
+    e.preventDefault();
+    const em = document.getElementById('email').value;
+    const pw = document.getElementById('password').value;
+    if (em === 'user@example.com' && pw === 'demo') {
+      localStorage.setItem('userName', em.split('@')[0]);
+      setTokens();
+      closeModal();
+      updateNavbarUser();
+      toast('Logged in');
+    } else {
+      toast('Invalid credentials');
+    }
+  };
+  document.getElementById('regLink').onclick = e => { e.preventDefault(); showRegisterForm(); };
+}
+
+function showRegisterForm() {
+  const modal = document.getElementById('modal');
+  if (!modal) { window.location.href = loginUrl(); return; }
+  document.getElementById('modalBody').innerHTML = `
+    <h2>Register</h2>
+    <form id="registerForm">
+      <input type="email" id="regEmail" placeholder="Email" required />
+      <input type="password" id="regPassword" placeholder="Password" required />
+      <button type="submit">Register</button>
+    </form>
+    <p><a href="#" id="loginLink">Back to login</a></p>
+  `;
+  modal.classList.remove('hidden');
+  document.getElementById('registerForm').onsubmit = e => {
+    e.preventDefault();
+    toast('Account created! (demo)');
+    showLoginForm();
+  };
+  document.getElementById('loginLink').onclick = e => { e.preventDefault(); showLoginForm(); };
+}
+
 function requireAuth() {
   if (!getToken()) {
-    window.location.href = loginUrl();
+    if (typeof showLoginForm === 'function') {
+      showLoginForm();
+    } else {
+      window.location.href = loginUrl();
+    }
   }
 }
 
@@ -50,4 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/frontend/sw.js').catch(() => {});
   }
+  const icon = document.getElementById('loginIcon');
+  if (icon) icon.onclick = showLoginForm;
+  updateNavbarUser();
 });

@@ -216,4 +216,12 @@ window.onload = () => {
   $('#closeModal').addEventListener('click', closeModal);
   setupVoiceSearch();
   showRecommendations();
+  const cartBtn = document.getElementById('cartBtn');
+  const cartPreview = document.getElementById('cartPreview');
+  if (cartBtn && cartPreview) {
+    const toggle = () => { renderCartPreview(); cartPreview.classList.toggle('hidden'); };
+    cartBtn.addEventListener('click', toggle);
+    cartBtn.addEventListener('mouseenter', () => { renderCartPreview(); cartPreview.classList.remove('hidden'); });
+    cartPreview.addEventListener('mouseleave', () => cartPreview.classList.add('hidden'));
+  }
 };

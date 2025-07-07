@@ -76,6 +76,30 @@ function renderCart(){
   totalEl.textContent = `Total: $${total.toFixed(2)}`;
 }
 
+function renderCartPreview() {
+  const preview = document.getElementById('cartPreview');
+  if (!preview) return;
+  const cart = getCart();
+  if (!cart.length) {
+    preview.innerHTML = '<p>Cart is empty</p>';
+    return;
+  }
+  preview.innerHTML = '';
+  let total = 0;
+  cart.forEach(item => {
+    const product = products.find(p => p.id === item.id);
+    if (!product) return;
+    const price = item.variant != null ? product.variants[item.variant].price : product.price;
+    total += price * item.qty;
+    preview.innerHTML += `<div class="row"><img src="${product.image}" alt="${product.name}"><span>${item.qty} x ${product.name}</span></div>`;
+  });
+  preview.innerHTML += `<p>Total: $${total.toFixed(2)}</p><button id="viewCart">View Cart</button>`;
+  preview.querySelector('#viewCart').onclick = () => { window.location.href = 'cart.html'; };
+}
+
 document.addEventListener('storage', e => {
-  if(e.key === CART_KEY) renderCart();
+  if (e.key === CART_KEY) {
+    if (document.getElementById('cartItems')) renderCart();
+    if (document.getElementById('cartPreview')) renderCartPreview();
+  }
 });
