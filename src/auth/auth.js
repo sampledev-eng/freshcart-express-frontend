@@ -17,11 +17,17 @@ function getToken() {
   return null;
 }
 
+function loginUrl() {
+  const match = location.pathname.match(/^(.*\/src\/)/);
+  if (match) {
+    return match[1] + 'auth/login.html';
+  }
+  return 'auth/login.html';
+}
+
 function requireAuth() {
   if (!getToken()) {
-    // Always redirect to the login page relative to the repository root so
-    // nested pages like `auth/profile.html` don't resolve to `auth/auth/login.html`.
-    window.location.href = '/src/auth/login.html';
+    window.location.href = loginUrl();
   }
 }
 
