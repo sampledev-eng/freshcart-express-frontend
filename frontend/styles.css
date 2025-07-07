@@ -185,3 +185,10 @@ header .icon-link {
 #recTitle.hidden {
   display: none;
 }
+
+@media (max-width: 600px) {
+  /* Stack product cards vertically on small screens */
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+}
