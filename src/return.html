@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Return Request</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <h1>Return Request</h1>
+  <form id="returnForm">
+    <input type="text" placeholder="Order ID" required />
+    <textarea placeholder="Reason" required></textarea>
+    <button type="submit">Submit</button>
+  </form>
+  <script src="toast.js"></script>
+  <script>
+    document.getElementById('returnForm').onsubmit = e => {
+      e.preventDefault();
+      toast('Return requested');
+    };
+  </script>
+</body>
+</html>

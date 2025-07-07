@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout - FreshCart Express</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <h1>Checkout</h1>
+  <form id="checkoutForm">
+    <div class="step" id="step1">
+      <h2>Shipping</h2>
+      <input type="text" id="address" placeholder="Address" required />
+      <select id="slot">
+        <option value="Morning">Morning</option>
+        <option value="Afternoon">Afternoon</option>
+        <option value="Evening">Evening</option>
+      </select>
+      <button type="button" onclick="nextStep()">Next</button>
+    </div>
+    <div class="step hidden" id="step2">
+      <h2>Payment</h2>
+      <input type="text" placeholder="Card Number" required />
+      <input type="text" id="promo" placeholder="Promo code" />
+      <p id="total">Total: $0.00</p>
+      <button type="button" onclick="applyPromo()">Apply Code</button>
+      <button type="button" onclick="prevStep()">Back</button>
+      <button type="button" onclick="nextStep()">Next</button>
+    </div>
+    <div class="step hidden" id="step3">
+      <h2>Confirm</h2>
+      <p>Review your order and submit.</p>
+      <button type="button" onclick="prevStep()">Back</button>
+      <button type="submit">Place Order</button>
+    </div>
+  </form>
+
+  <script>
+    let currentStep = 1;
+    let total = 50; // demo total
+    const totalEl = document.getElementById('total');
+    totalEl.textContent = `Total: $${total.toFixed(2)}`;
+    function showStep(num) {
+      document.querySelectorAll('.step').forEach((el, idx) => {
+        el.classList.toggle('hidden', idx !== num - 1);
+      });
+    }
+    function nextStep() {
+      currentStep++;
+      showStep(currentStep);
+    }
+    function prevStep() {
+      currentStep--;
+      showStep(currentStep);
+    }
+    function applyPromo() {
+      const code = document.getElementById('promo').value.trim();
+      if (code === 'SAVE10') {
+        total *= 0.9;
+        totalEl.textContent = `Total: $${total.toFixed(2)} (promo applied)`;
+        toast('Promo applied');
+      } else {
+        toast('Invalid code');
+      }
+    }
+    document.getElementById('checkoutForm').onsubmit = e => {
+      e.preventDefault();
+      toast('Order placed!');
+      if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification('FreshCart', { body: 'Thank you for your order!' });
+      }
+    };
+    if ('Notification' in window && Notification.permission !== 'granted') {
+      Notification.requestPermission();
+    }
+    showStep(currentStep);
+  </script>
+  <script src="toast.js"></script>
+</body>
+</html>
