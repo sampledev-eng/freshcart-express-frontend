@@ -31,13 +31,24 @@ function renderProducts(list) {
   list.forEach(p => {
     const card = document.createElement('div');
     card.className = 'product-card';
-    if (p.stock === 0) card.classList.add('out-of-stock');
+    if (p.stock === 0) {
+      card.classList.add('out-of-stock');
+    } else {
+      card.classList.add('in-stock');
+    }
     card.innerHTML = `
       <img src="${p.image}" alt="${p.name}" />
       <h3>${p.name}</h3>
       <p>$${p.price.toFixed(2)}</p>
+      ${p.stock > 0 ? '<button class="add-btn">Add to Cart</button>' : ''}
     `;
-    if (p.stock > 0) card.onclick = () => openModal(p);
+    if (p.stock > 0) {
+      card.querySelector('.add-btn').onclick = e => {
+        e.stopPropagation();
+        addToCart(p.id);
+      };
+      card.onclick = () => openModal(p);
+    }
     container.appendChild(card);
   });
 }
