@@ -129,6 +129,7 @@ header .icon-link {
   cursor: pointer;
 }
 .autocomplete-item:hover { background: #eee; }
+.cart-row { display:flex; align-items:center; gap:10px; margin:5px 0; }
 .toast {
   position: fixed;
   bottom: 20px;
