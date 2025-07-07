@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile</title>
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+  <h1>Profile</h1>
+  <img id="avatar" src="" alt="avatar" width="100" />
+  <form id="profileForm">
+    <input type="file" id="imgInput" accept="image/*" />
+    <button type="submit">Save</button>
+  </form>
+  <script src="auth.js"></script>
+  <script src="../toast.js"></script>
+  <script>
+    requireAuth();
+    const img = document.getElementById('avatar');
+    const stored = localStorage.getItem('avatar');
+    if (stored) img.src = stored;
+    document.getElementById('profileForm').onsubmit = e => {
+      e.preventDefault();
+      const file = document.getElementById('imgInput').files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          img.src = reader.result;
+          localStorage.setItem('avatar', reader.result);
+          toast('Saved');
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+  </script>
+</body>
+</html>
