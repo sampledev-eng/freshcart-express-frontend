@@ -1,10 +1,9 @@
 {
   "name": "freshcart-express-frontend",
   "version": "1.0.0",
-  "homepage": "https://ideal-space-waffle-69p4v7pq4wwpfr55v-5500.app.github.dev/",
+  "homepage": "https://sampledev-eng.github.io/freshcart-express-frontend",
   "scripts": {
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d ./frontend"
+    "deploy": "gh-pages -d frontend"
   },
   "devDependencies": {
     "gh-pages": "^6.0.0"
