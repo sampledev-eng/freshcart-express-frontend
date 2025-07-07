@@ -19,7 +19,9 @@ function getToken() {
 
 function requireAuth() {
   if (!getToken()) {
-    window.location.href = 'auth/login.html';
+    // Always redirect to the login page relative to the repository root so
+    // nested pages like `auth/profile.html` don't resolve to `auth/auth/login.html`.
+    window.location.href = '/src/auth/login.html';
   }
 }
 
