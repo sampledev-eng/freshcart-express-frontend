@@ -1,5 +1,7 @@
 const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
+// Base URL for backend API calls
+const API_BASE_URL = 'https://curly-space-enigma-q7xpvgxjpxgqh6x5j-8000.app.github.dev';
 
 let searchTimeout;
 function debounceSearch() {
@@ -7,7 +9,15 @@ function debounceSearch() {
   searchTimeout = setTimeout(handleSearch, 300);
 }
 
-function getSuggestions(q) {
+async function getSuggestions(q) {
+  try {
+    const res = await fetch(`${API_BASE_URL}/suggest?q=${encodeURIComponent(q)}`);
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch (e) {
+    // network failure, fall back to local search
+  }
   return new Promise(res => {
     setTimeout(() => {
       res(products.filter(p => p.name.toLowerCase().includes(q)).slice(0,5));
