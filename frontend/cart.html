@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cart - FreshCart Express</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <h1>Your Cart</h1>
+  <div id="cartItems"></div>
+  <p id="cartTotal">Total: $0.00</p>
+  <button id="checkoutBtn">Checkout</button>
+  <script src="auth/auth.js"></script>
+  <script src="cart.js"></script>
+  <script>
+    requireAuth();
+    renderCart();
+    document.getElementById('checkoutBtn').onclick = () => {
+      window.location.href = 'checkout.html';
+    };
+  </script>
+  <script src="toast.js"></script>
+</body>
+</html>

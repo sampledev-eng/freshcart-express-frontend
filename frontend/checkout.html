@@ -36,9 +36,19 @@
     </div>
   </form>
 
+  <script src="products.js"></script>
+  <script src="cart.js"></script>
   <script>
     let currentStep = 1;
-    let total = 50; // demo total
+    const cart = getCart();
+    let total = 0;
+    cart.forEach(item => {
+      const product = products.find(p => p.id === item.id);
+      if(product){
+        const price = item.variant != null ? product.variants[item.variant].price : product.price;
+        total += price * item.qty;
+      }
+    });
     const totalEl = document.getElementById('total');
     totalEl.textContent = `Total: $${total.toFixed(2)}`;
     function showStep(num) {
@@ -67,6 +77,11 @@
     document.getElementById('checkoutForm').onsubmit = e => {
       e.preventDefault();
       toast('Order placed!');
+      localStorage.setItem('cart', '[]');
+      syncCart([]);
+      const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+      orders.push({ id: Date.now(), status: 'Pending' });
+      localStorage.setItem('orders', JSON.stringify(orders));
       if ('Notification' in window && Notification.permission === 'granted') {
         new Notification('FreshCart', { body: 'Thank you for your order!' });
       }
