@@ -25,16 +25,21 @@ function loginUrl() {
 
 function updateNavbarUser() {
   const name = localStorage.getItem('userName');
-  const userEl = document.getElementById('navUser');
-  const iconEl = document.getElementById('loginIcon');
-  if (!userEl || !iconEl) return;
+  const loginEls = ['loginIcon', 'drawerLogin']
+    .map(id => document.getElementById(id))
+    .filter(Boolean);
+  const userEls = ['navUser', 'drawerUser']
+    .map(id => document.getElementById(id))
+    .filter(Boolean);
   if (getToken() && name) {
-    userEl.textContent = name;
-    userEl.classList.remove('hidden');
-    iconEl.classList.add('hidden');
+    userEls.forEach(el => {
+      el.textContent = name;
+      el.classList.remove('hidden');
+    });
+    loginEls.forEach(el => el.classList.add('hidden'));
   } else {
-    userEl.classList.add('hidden');
-    iconEl.classList.remove('hidden');
+    userEls.forEach(el => el.classList.add('hidden'));
+    loginEls.forEach(el => el.classList.remove('hidden'));
   }
 }
 
@@ -43,26 +48,33 @@ function showLoginForm() {
   if (!modal) { window.location.href = loginUrl(); return; }
   document.getElementById('modalBody').innerHTML = `
     <h2>Login</h2>
-    <form id="loginForm">
-      <input type="email" id="email" placeholder="Email" required />
-      <input type="password" id="password" placeholder="Password" required />
-      <button type="submit">Login</button>
+    <form id="loginForm" class="mobile-login">
+      <input type="text" id="mobile" placeholder="Mobile or Email" required />
+      <button type="button" id="sendOtp">Send OTP</button>
+      <div id="otpSection" class="hidden">
+        <input type="text" id="otpInput" placeholder="OTP" required />
+        <button type="submit">Verify</button>
+      </div>
     </form>
     <p>New user? <a href="#" id="regLink">Register here</a></p>
   `;
   modal.classList.remove('hidden');
+  document.getElementById('sendOtp').onclick = () => {
+    document.getElementById('otpSection').classList.remove('hidden');
+    toast('Demo OTP: 123456');
+  };
   document.getElementById('loginForm').onsubmit = e => {
     e.preventDefault();
-    const em = document.getElementById('email').value;
-    const pw = document.getElementById('password').value;
-    if (em === 'user@example.com' && pw === 'demo') {
-      localStorage.setItem('userName', em.split('@')[0]);
+    const otp = document.getElementById('otpInput').value;
+    if (otp === '123456') {
+      const val = document.getElementById('mobile').value;
+      localStorage.setItem('userName', val);
       setTokens();
       closeModal();
       updateNavbarUser();
       toast('Logged in');
     } else {
-      toast('Invalid credentials');
+      toast('Invalid OTP');
     }
   };
   document.getElementById('regLink').onclick = e => { e.preventDefault(); showRegisterForm(); };
@@ -100,7 +112,8 @@ function requireAuth() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const toggle = document.getElementById('darkToggle');
+  const toggle = document.getElementById('darkToggle') ||
+                 document.getElementById('drawerDarkToggle');
   if (toggle) {
     toggle.checked = localStorage.getItem('dark') === 'true';
     document.body.classList.toggle('dark', toggle.checked);
@@ -120,7 +133,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/frontend/sw.js').catch(() => {});
   }
-  const icon = document.getElementById('loginIcon');
+  const icon = document.getElementById('loginIcon') ||
+               document.getElementById('drawerLogin');
   if (icon) icon.onclick = showLoginForm;
   updateNavbarUser();
 });

@@ -11,7 +11,7 @@ const products = [
     ],
     popularity: 5,
     stock: 10,
-    image: 'https://source.unsplash.com/200x200/?apple',
+    image: 'https://via.placeholder.com/200?text=Apple',
     description: 'Fresh apples from local farms.'
   },
   {
@@ -26,7 +26,7 @@ const products = [
     ],
     popularity: 3,
     stock: 0,
-    image: 'https://source.unsplash.com/200x200/?banana',
+    image: 'https://via.placeholder.com/200?text=Banana',
     description: 'Organic bananas rich in potassium.'
   },
   {
@@ -41,7 +41,7 @@ const products = [
     ],
     popularity: 4,
     stock: 25,
-    image: 'https://source.unsplash.com/200x200/?carrot',
+    image: 'https://via.placeholder.com/200?text=Carrot',
     description: 'Crunchy carrots full of vitamins.'
   },
   {
@@ -56,7 +56,7 @@ const products = [
     ],
     popularity: 5,
     stock: 5,
-    image: 'https://source.unsplash.com/200x200/?milk',
+    image: 'https://via.placeholder.com/200?text=Milk',
     description: 'Dairy milk with full cream.'
   }
 ];

@@ -1,4 +1,4 @@
-# FreshCart Express Frontend
+# FreshCart Frontend
 
 This is a lightweight demo frontend inspired by online grocery apps. It now includes basic auth screens, profile management, product filters, and order tracking alongside the original catalog and checkout pages.
 
