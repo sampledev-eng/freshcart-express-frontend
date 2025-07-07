@@ -3,22 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FreshCart Express</title>
+  <title>FreshCart</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
 </head>
 <body>
   <div class="frame page">
     <header class="frame header-frame">
-      <img src="assets/logo.svg" alt="logo" class="logo" />
-      <h1 data-i18n="title" class="header-title">FreshCart Express</h1>
+      <button id="menuBtn" class="icon-link">☰</button>
       <div class="search-group">
         <input type="text" id="searchBar" placeholder="Search products" />
         <div id="autocomplete" class="autocomplete-list hidden"></div>
         <button id="voiceSearchBtn">🎤</button>
       </div>
+      <div class="brand">
+        <img src="assets/logo.svg" alt="logo" class="logo" />
+        <h1 data-i18n="title" class="header-title">FreshCart</h1>
+      </div>
+    </header>
+    <nav id="drawer" class="drawer">
       <button id="filterBtn" data-i18n="filters">Filters</button>
       <select id="themeSelect">
         <option value="default" selected>Default</option>
@@ -28,12 +34,12 @@
         <option value="en">EN</option>
         <option value="es">ES</option>
       </select>
-      <button id="loginIcon" class="icon-link">👤</button>
-      <span id="navUser" class="icon-link hidden"></span>
-      <button id="cartBtn" class="icon-link">🛒</button>
-      <div id="cartPreview" class="cart-preview hidden"></div>
-      <label class="dark-toggle"><input type="checkbox" id="darkToggle"> Dark</label>
-    </header>
+      <a href="cart.html">Cart</a>
+      <a href="#" id="drawerLogin">Login</a>
+      <span id="drawerUser" class="hidden"></span>
+      <div id="drawerCategories"></div>
+      <label class="dark-toggle"><input type="checkbox" id="drawerDarkToggle"> Dark Mode</label>
+    </nav>
 
     <section class="hero frame">
       <h2 class="hero-title">Fresh groceries delivered fast</h2>
@@ -72,12 +78,27 @@
       </div>
     </div>
 
+    <div id="promoModal" class="modal hidden">
+      <div class="modal-content">
+        <div class="swiper" id="promoSwiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">Free delivery on your first order!</div>
+            <div class="swiper-slide">Schedule deliveries at your convenience.</div>
+            <div class="swiper-slide">Track orders easily in the app.</div>
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+        <button id="closePromo" class="close">&times;</button>
+      </div>
+    </div>
+
     <div id="offline" class="offline hidden">You are offline</div>
 
   </div>
   <script src="auth/auth.js"></script>
   <script src="products.js"></script>
   <script src="cart.js"></script>
+  <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

@@ -8,24 +8,31 @@
 </head>
 <body>
   <h1>Login</h1>
-  <form id="loginForm">
-    <input type="email" id="email" placeholder="Email" required />
-    <input type="password" id="password" placeholder="Password" required />
-    <button type="submit">Login</button>
+  <form id="loginForm" class="mobile-login">
+    <input type="text" id="mobile" placeholder="Mobile or Email" required />
+    <button type="button" id="sendOtp">Send OTP</button>
+    <div id="otpSection" class="hidden">
+      <input type="text" id="otpInput" placeholder="OTP" required />
+      <button type="submit">Verify</button>
+    </div>
   </form>
   <p><a href="forgot-password.html">Forgot password?</a></p>
   <p>New user? <a href="register.html">Register here</a></p>
   <script src="auth.js"></script>
   <script>
+    document.getElementById('sendOtp').onclick = () => {
+      document.getElementById('otpSection').classList.remove('hidden');
+      toast('Demo OTP: 123456');
+    };
     document.getElementById('loginForm').onsubmit = e => {
       e.preventDefault();
-      const em = document.getElementById('email').value;
-      const pw = document.getElementById('password').value;
-      if (em === 'user@example.com' && pw === 'demo') {
+      const otp = document.getElementById('otpInput').value;
+      if (otp === '123456') {
+        localStorage.setItem('userName', document.getElementById('mobile').value);
         setTokens();
         window.location.href = '../index.html';
       } else {
-        toast('Invalid credentials');
+        toast('Invalid OTP');
       }
     };
   </script>
