@@ -37,7 +37,7 @@ function renderProducts(list) {
       card.classList.add('in-stock');
     }
     card.innerHTML = `
-      <img src="${p.image}" alt="${p.name}" />
+      <img src="${p.image}" alt="${p.name}" onerror="this.onerror=null;this.src='https://via.placeholder.com/150'" />
       <h3>${p.name}</h3>
       <div class="card-footer">
         <span>$${p.price.toFixed(2)}</span>
@@ -60,7 +60,7 @@ function openModal(product) {
   const modal = $('#modal');
   const reviews = JSON.parse(localStorage.getItem('reviews') || '{}')[product.id] || [];
   $('#modalBody').innerHTML = `
-    <img src="${product.image}" alt="${product.name}" />
+    <img src="${product.image}" alt="${product.name}" onerror="this.onerror=null;this.src='https://via.placeholder.com/150'" />
     <h2>${product.name}</h2>
     <p>${product.description}</p>
     ${product.variants ? `<select id="variantSelect">${product.variants.map((v,i)=>`<option value="${i}">${v.label} - $${v.price.toFixed(2)}</option>`).join('')}</select>` : ''}
@@ -190,25 +190,6 @@ function applyLang(lang) {
   localStorage.setItem('lang', lang);
 }
 
-function showLocationPrompt() {
-  if (localStorage.getItem('pincode')) return;
-  const modal = document.getElementById('modal');
-  if (!modal) return;
-  document.getElementById('modalBody').innerHTML = `
-    <h2>Enter Pincode</h2>
-    <form id="pinForm">
-      <input type="text" id="pincodeInput" placeholder="e.g. 560001" required />
-      <button type="submit">Save</button>
-    </form>
-  `;
-  modal.classList.remove('hidden');
-  document.getElementById('pinForm').onsubmit = e => {
-    e.preventDefault();
-    localStorage.setItem('pincode', document.getElementById('pincodeInput').value);
-    closeModal();
-    toast('Location saved');
-  };
-}
 
 function showPromo() {
   if (localStorage.getItem('promoShown')) return;
@@ -281,6 +262,13 @@ window.onload = () => {
       document.body.classList.toggle('dark', drawerDark.checked);
     };
   }
-  showLocationPrompt();
+  const pinInput = document.getElementById('pincodeInputHeader');
+  if (pinInput) {
+    pinInput.value = localStorage.getItem('pincode') || '';
+    pinInput.onchange = () => {
+      localStorage.setItem('pincode', pinInput.value);
+      toast('Location saved');
+    };
+  }
   showPromo();
 };
