@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!offline) return;
     offline.classList.toggle('hidden', navigator.onLine);
   }
-  updateOffline();
+  window.addEventListener('load', updateOffline);
   window.addEventListener('online', updateOffline);
   window.addEventListener('offline', updateOffline);
   if ('serviceWorker' in navigator) {

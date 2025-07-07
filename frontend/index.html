@@ -6,12 +6,13 @@
   <title>FreshCart Express</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header>
-    <h1 data-i18n="title">FreshCart Express</h1>
+    <img src="assets/logo.svg" alt="logo" class="logo" />
+    <h1 data-i18n="title" class="header-title">FreshCart Express</h1>
     <input type="text" id="searchBar" placeholder="Search products" />
     <div id="autocomplete" class="autocomplete-list hidden"></div>
     <button id="voiceSearchBtn">🎤</button>
@@ -50,7 +51,7 @@
   <main>
     <section id="productList" class="product-grid"></section>
     <h2 id="recTitle" class="hidden">Recently Viewed</h2>
-    <section id="recommended" class="product-grid"></section>
+    <section id="recommended" class="product-grid mobile-scroll"></section>
   </main>
 
   <div id="modal" class="modal hidden">
