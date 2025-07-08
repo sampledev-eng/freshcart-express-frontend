@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>FreshCart</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-pq1Vh9GU8C8WukZp9xd85PL4tPcNI0YvrFica8FWHZcizxgxYkWwaRMt1ikIzejneih/7gToYtL6VQAHW8IzVg==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="footer.css" />
   <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
 </head>
 <body>
@@ -124,12 +125,28 @@
 
     <div id="offline" class="offline hidden">You are offline</div>
 
-    <nav class="bottom-nav">
-      <a href="index.html" class="nav-item active"><i class="fa fa-home"></i><span>Home</span></a>
-      <a href="#" id="categoriesTab" class="nav-item"><i class="fa fa-th-large"></i><span>Categories</span></a>
-      <a href="#searchBar" class="nav-item"><i class="fa fa-search"></i><span>Search</span></a>
-      <a href="#" class="nav-item"><i class="fa fa-tags"></i><span>Offers</span></a>
-      <a href="cart.html" class="nav-item" id="cartTab"><i class="fa fa-shopping-cart"></i><span>Cart</span><span id="cartCount" class="badge hidden">0</span></a>
+    <nav id="bottomNav">
+      <button class="navBtn active" data-page="home">
+        <span class="icon" aria-hidden="true">🏠</span>
+        <span class="label">Home</span>
+      </button>
+      <button class="navBtn" data-page="categories">
+        <span class="icon">🗂️</span>
+        <span class="label">Categories</span>
+      </button>
+      <button class="navBtn" data-page="search">
+        <span class="icon">🔍</span>
+        <span class="label">Search</span>
+      </button>
+      <button class="navBtn" data-page="offers">
+        <span class="icon">🎯</span>
+        <span class="label">Offers</span>
+      </button>
+      <button class="navBtn" data-page="cart" id="cartBtn">
+        <span class="icon">🛒</span>
+        <span class="label">Cart</span>
+        <span id="cartBadge" class="badge hidden">0</span>
+      </button>
     </nav>
 
   </div>
@@ -141,14 +158,16 @@
   <script src="app.js"></script>
   <script src="main.js"></script>
   <script type="module" src="ui.js"></script>
-  <aside id="categorySheet" class="category-sheet">
-    <div class="sheet-header">
-      <span>SHOP BY CATEGORY</span>
-      <button id="closeCategorySheet">&times;</button>
-    </div>
-    <ul id="categoryList" class="category-list"></ul>
+  <script src="footer.js"></script>
+  <aside id="categorySheet" class="sheet hidden">
+    <header class="sheet-bar">
+      <button id="catBack" class="backBtn" aria-label="Back">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M15 18l-6-6 6-6" stroke="currentColor"/></svg>
+      </button>
+      <h2>SHOP BY CATEGORY</h2>
+    </header>
+    <ul id="catList"></ul>
   </aside>
-  <div id="catBackdrop" class="sheet-backdrop"></div>
   <nav id="sideMenu" role="navigation" aria-label="Main menu">
     <div class="menu-header">
       <a href="auth/login.html" class="menu-item" tabindex="0">Login / Signup</a>

@@ -1,11 +1,9 @@
 import { categories } from './categories.js';
 
 const sheet = document.getElementById('categorySheet');
-const list = document.getElementById('categoryList');
-const backdrop = document.getElementById('catBackdrop');
-const menuBtn = document.getElementById('menuBtn');
-const catTab = document.getElementById('categoriesTab');
-const closeBtn = document.getElementById('closeCategorySheet');
+const list = document.getElementById('catList');
+const backBtn = document.getElementById('catBack');
+const catBtn = document.querySelector('[data-page="categories"]');
 
 function iconSVG(name) {
   const icons = {
@@ -26,20 +24,35 @@ function iconSVG(name) {
 }
 
 if (list) {
-  list.innerHTML = categories.map(c => `<li>${iconSVG(c.icon)}<span>${c.label}</span></li>`).join('');
+  list.innerHTML = categories
+    .map(c => `<li><button class="catItem" data-slug="${c.id}">` +
+               `<span class="icon">${iconSVG(c.icon)}</span>` +
+               `<span class="label">${c.label}</span>` +
+               `</button></li>`)
+    .join('');
+
+  list.addEventListener('click', e => {
+    const item = e.target.closest('.catItem');
+    if (!item) return;
+    const label = item.querySelector('.label').textContent;
+    const filter = document.getElementById('categoryFilter');
+    if (filter) {
+      filter.value = label;
+      if (typeof applyFilters === 'function') applyFilters();
+    }
+    closeSheet();
+  });
 }
 
 function openSheet() {
-  sheet.classList.add('open');
-  backdrop.classList.add('open');
+  sheet.classList.remove('hidden');
 }
 
 function closeSheet() {
-  sheet.classList.remove('open');
-  backdrop.classList.remove('open');
+  sheet.classList.add('hidden');
 }
 
-if (menuBtn) menuBtn.onclick = openSheet;
-if (catTab) catTab.onclick = e => { e.preventDefault(); openSheet(); };
-if (closeBtn) closeBtn.onclick = closeSheet;
-if (backdrop) backdrop.onclick = closeSheet;
+if (catBtn) catBtn.onclick = e => { e.preventDefault(); openSheet(); };
+if (backBtn) backBtn.onclick = closeSheet;
+
+
