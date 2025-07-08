@@ -31,7 +31,7 @@ function renderProducts(list) {
   const cart = getCart();
   list.forEach(p => {
     const card = document.createElement('div');
-    card.className = 'product-card';
+    card.className = 'card';
     const cartItem = cart.find(i => i.id === p.id && i.variant === null);
     const qty = cartItem ? cartItem.qty : 0;
     if (p.stock === 0) {
@@ -40,43 +40,37 @@ function renderProducts(list) {
       card.classList.add('in-stock');
     }
     const discount = p.mrp ? Math.round((1 - p.price / p.mrp) * 100) : 0;
+    const qtyLabel = p.variants && p.variants[0] ? p.variants[0].label : '1 pc';
     card.innerHTML = `
-      <div class="image-container">
-        <img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.src='https://via.placeholder.com/150'" />
-        ${discount > 0 ? `<span class="offer-tag">${discount}% OFF</span>` : ''}
-        <div class="qty-controls ${qty ? '' : 'hidden'}">
-          <button class="qty-btn minus">-</button>
-          <span class="qty">${qty}</span>
-          <button class="qty-btn plus">+</button>
-        </div>
-      </div>
-      <div class="delivery-label"><span class="dot"></span>⏱️ 5 mins</div>
-      <h3 class="product-name">${p.name}</h3>
-      <div class="eta">${p.variants && p.variants[0] ? p.variants[0].label : '1 pc'}</div>
-      <div class="price-row">
-        <span class="price">$${p.price.toFixed(2)}</span>
-        ${p.mrp ? `<span class="mrp">$${p.mrp.toFixed(2)}</span>` : ''}
-      </div>
-      <div class="tagline">Har Din Sasta!</div>
-      <div class="add-section">
-        <button class="qty-btn plus main" ${p.stock > 0 ? '' : 'disabled'}>+</button>
-      </div>
+      ${discount > 0 ? `<span class="disc">${discount}% OFF</span>` : ''}
+      <img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.src='https://via.placeholder.com/150'" />
+      <span class="timer">⏱ 5 mins</span>
+      <p class="name">${p.name}</p>
+      <p class="qty">${qtyLabel}</p>
+      <p class="price">₹${p.price} ${p.mrp ? `<del>₹${p.mrp}</del>` : ''}</p>
+      ${qty === 0
+        ? `<button class="add" data-id="${p.id}">ADD +</button>`
+        : `<div class="counter" data-id="${p.id}">
+             <button class="minus">−</button>
+             <span>${qty}</span>
+             <button class="plus">+</button>
+           </div>`}
     `;
-    const plusMain = card.querySelector('.add-section .plus');
-    const controls = card.querySelector('.qty-controls');
-    const plus = card.querySelector('.qty-controls .plus');
-    const minus = card.querySelector('.qty-controls .minus');
-    const qtySpan = card.querySelector('.qty-controls .qty');
+    const addBtn = card.querySelector('.add');
+    const counter = card.querySelector('.counter');
+    const plus = card.querySelector('.counter .plus');
+    const minus = card.querySelector('.counter .minus');
+    const qtySpan = counter ? counter.querySelector('span') : null;
     const update = (newQty) => {
-      qtySpan.textContent = newQty;
-      controls.classList.toggle('hidden', newQty === 0);
-      plusMain.style.display = newQty === 0 ? 'block' : 'none';
+      if (qtySpan) qtySpan.textContent = newQty;
+      if (counter) counter.style.display = newQty ? 'flex' : 'none';
+      if (addBtn) addBtn.style.display = newQty ? 'none' : 'block';
     };
     update(qty);
     if (p.stock > 0) {
-      plusMain.onclick = e => { e.stopPropagation(); cartAdd(p.id); update(parseInt(qtySpan.textContent)+1); };
-      plus.onclick = e => { e.stopPropagation(); cartAdd(p.id); update(parseInt(qtySpan.textContent)+1); };
-      minus.onclick = e => { e.stopPropagation(); updateQty(p.id, null, parseInt(qtySpan.textContent)-1); update(parseInt(qtySpan.textContent)-1); };
+      if (addBtn) addBtn.onclick = e => { e.stopPropagation(); cartAdd(p.id); update(1); };
+      if (plus) plus.onclick = e => { e.stopPropagation(); cartAdd(p.id); update(parseInt(qtySpan.textContent)+1); };
+      if (minus) minus.onclick = e => { e.stopPropagation(); updateQty(p.id, null, parseInt(qtySpan.textContent)-1); update(parseInt(qtySpan.textContent)-1); };
       card.onclick = () => openModal(p);
     }
     container.appendChild(card);
@@ -199,7 +193,7 @@ function showRecommendations() {
   container.innerHTML = '';
   recommended.forEach(p => {
     const card = document.createElement('div');
-    card.className = 'product-card';
+    card.className = 'card';
     card.innerHTML = `<img src="${p.image}" alt="${p.name}" /><h3>${p.name}</h3><p>$${p.price.toFixed(2)}</p>`;
     card.onclick = () => openModal(p);
     container.appendChild(card);
@@ -249,7 +243,7 @@ function showSkeletons() {
   container.innerHTML = '';
   for(let i=0;i<4;i++) {
     const card = document.createElement('div');
-    card.className = 'product-card skeleton';
+    card.className = 'card skeleton';
     container.appendChild(card);
   }
 }

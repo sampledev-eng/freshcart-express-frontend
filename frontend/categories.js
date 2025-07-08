@@ -1,14 +1,10 @@
 export const categories = [
-  { id: 'electronics', label: 'Electronics', icon: 'earphones' },
-  { id: 'fashion', label: 'Fashion', icon: 'tshirt' },
-  { id: 'food', label: 'Food Court', icon: 'bowl' },
-  { id: 'wellness', label: 'Pharmacy & Wellness', icon: 'pill' },
-  { id: 'fv', label: 'Fruits & Vegetables', icon: 'apple' },
-  { id: 'beverages', label: 'Beverages', icon: 'bottle' },
-  { id: 'home', label: 'Home & Kitchen', icon: 'home' },
-  { id: 'beauty', label: 'Beauty & Hygiene', icon: 'lipstick' },
-  { id: 'bakery', label: 'Bakery', icon: 'bread' },
-  { id: 'baby', label: 'Baby Care', icon: 'pacifier' },
-  { id: 'meat', label: 'Meat & Seafood', icon: 'fish' },
-  { id: 'gourmet', label: 'Gourmet', icon: 'cheese' }
+  { slug: 'fresh-veg', label: 'Fruits & Vegetables', icon: 'veg.svg' },
+  { slug: 'snacks', label: 'Snacks & Branded Food', icon: 'chips.svg' },
+  { slug: 'beverages', label: 'Beverages', icon: 'drink.svg' },
+  { slug: 'bakery', label: 'Bakery & Dairy', icon: 'bread.svg' },
+  { slug: 'household', label: 'Household', icon: 'home.svg' },
+  { slug: 'personal-care', label: 'Personal Care', icon: 'care.svg' },
+  { slug: 'baby', label: 'Baby Care', icon: 'baby.svg' },
+  { slug: 'meat', label: 'Meat & Seafood', icon: 'meat.svg' }
 ];
