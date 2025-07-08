@@ -28,9 +28,12 @@ async function getSuggestions(q) {
 function renderProducts(list) {
   const container = $('#productList');
   container.innerHTML = '';
+  const cart = getCart();
   list.forEach(p => {
     const card = document.createElement('div');
     card.className = 'product-card';
+    const cartItem = cart.find(i => i.id === p.id && i.variant === null);
+    const qty = cartItem ? cartItem.qty : 0;
     if (p.stock === 0) {
       card.classList.add('out-of-stock');
     } else {
@@ -41,23 +44,39 @@ function renderProducts(list) {
       <div class="image-container">
         <img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.src='https://via.placeholder.com/150'" />
         ${discount > 0 ? `<span class="offer-tag">${discount}% OFF</span>` : ''}
-      </div>
-      <h3 class="product-name">${p.name}</h3>
-      <div class="eta">${p.eta || ''}</div>
-      <div class="card-footer">
-        <div>
-          <span class="price">$${p.price.toFixed(2)}</span>
-          ${p.mrp ? `<span class="mrp">$${p.mrp.toFixed(2)}</span>` : ''}
+        <div class="qty-controls ${qty ? '' : 'hidden'}">
+          <button class="qty-btn minus">-</button>
+          <span class="qty">${qty}</span>
+          <button class="qty-btn plus">+</button>
         </div>
-        <button class="add-btn" ${p.stock > 0 ? '' : 'disabled'}>${p.stock > 0 ? 'Add to Cart' : 'Out of Stock'}</button>
+      </div>
+      <div class="delivery-label"><span class="dot"></span>⏱️ 5 mins</div>
+      <h3 class="product-name">${p.name}</h3>
+      <div class="eta">${p.variants && p.variants[0] ? p.variants[0].label : '1 pc'}</div>
+      <div class="price-row">
+        <span class="price">$${p.price.toFixed(2)}</span>
+        ${p.mrp ? `<span class="mrp">$${p.mrp.toFixed(2)}</span>` : ''}
+      </div>
+      <div class="tagline">Har Din Sasta!</div>
+      <div class="add-section">
+        <button class="qty-btn plus main" ${p.stock > 0 ? '' : 'disabled'}>+</button>
       </div>
     `;
-    const btn = card.querySelector('.add-btn');
+    const plusMain = card.querySelector('.add-section .plus');
+    const controls = card.querySelector('.qty-controls');
+    const plus = card.querySelector('.qty-controls .plus');
+    const minus = card.querySelector('.qty-controls .minus');
+    const qtySpan = card.querySelector('.qty-controls .qty');
+    const update = (newQty) => {
+      qtySpan.textContent = newQty;
+      controls.classList.toggle('hidden', newQty === 0);
+      plusMain.style.display = newQty === 0 ? 'block' : 'none';
+    };
+    update(qty);
     if (p.stock > 0) {
-      btn.onclick = e => {
-        e.stopPropagation();
-        addToCart(p.id);
-      };
+      plusMain.onclick = e => { e.stopPropagation(); cartAdd(p.id); update(parseInt(qtySpan.textContent)+1); };
+      plus.onclick = e => { e.stopPropagation(); cartAdd(p.id); update(parseInt(qtySpan.textContent)+1); };
+      minus.onclick = e => { e.stopPropagation(); updateQty(p.id, null, parseInt(qtySpan.textContent)-1); update(parseInt(qtySpan.textContent)-1); };
       card.onclick = () => openModal(p);
     }
     container.appendChild(card);
@@ -236,6 +255,7 @@ function showSkeletons() {
 }
 
 window.onload = () => {
+  updateCartBadge();
   const brands = [...new Set(products.map(p=>p.brand))];
   const cats = [...new Set(products.map(p=>p.category))];
   $('#brandFilter').innerHTML += brands.map(b=>`<option>${b}</option>`).join('');

@@ -1,5 +1,17 @@
 const CART_KEY = 'cart';
 
+function getCartCount(){
+  return getCart().reduce((sum,item)=>sum+item.qty,0);
+}
+
+function updateCartBadge(){
+  const badge = document.getElementById('cartCount');
+  if(!badge) return;
+  const count = getCartCount();
+  badge.textContent = count;
+  badge.classList.toggle('hidden', count === 0);
+}
+
 function getCart(){
   return JSON.parse(localStorage.getItem(CART_KEY) || '[]');
 }
@@ -7,6 +19,7 @@ function getCart(){
 function saveCart(cart){
   localStorage.setItem(CART_KEY, JSON.stringify(cart));
   syncCart(cart);
+  updateCartBadge();
 }
 
 function cartAdd(id, variant = null, qty = 1){
@@ -101,5 +114,6 @@ document.addEventListener('storage', e => {
   if (e.key === CART_KEY) {
     if (document.getElementById('cartItems')) renderCart();
     if (document.getElementById('cartPreview')) renderCartPreview();
+    updateCartBadge();
   }
 });
