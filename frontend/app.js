@@ -38,16 +38,18 @@ function renderProducts(list) {
     }
     const discount = p.mrp ? Math.round((1 - p.price / p.mrp) * 100) : 0;
     card.innerHTML = `
-      ${discount > 0 ? `<span class="offer-tag">${discount}% OFF</span>` : ''}
-      <img src="${p.image}" alt="${p.name}" onerror="this.onerror=null;this.src='https://via.placeholder.com/150'" />
-      <h3>${p.name}</h3>
+      <div class="image-container">
+        <img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.src='https://via.placeholder.com/150'" />
+        ${discount > 0 ? `<span class="offer-tag">${discount}% OFF</span>` : ''}
+      </div>
+      <h3 class="product-name">${p.name}</h3>
       <div class="eta">${p.eta || ''}</div>
       <div class="card-footer">
         <div>
           <span class="price">$${p.price.toFixed(2)}</span>
           ${p.mrp ? `<span class="mrp">$${p.mrp.toFixed(2)}</span>` : ''}
         </div>
-        <button class="add-btn" ${p.stock > 0 ? '' : 'disabled'}>Add to Cart</button>
+        <button class="add-btn" ${p.stock > 0 ? '' : 'disabled'}>${p.stock > 0 ? 'Add to Cart' : 'Out of Stock'}</button>
       </div>
     `;
     const btn = card.querySelector('.add-btn');
