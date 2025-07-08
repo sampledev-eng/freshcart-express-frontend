@@ -18,10 +18,26 @@
   <p><a href="login.html">Back to login</a></p>
   <script src="../toast.js"></script>
   <script>
-    document.getElementById('registerForm').onsubmit = e => {
+    document.getElementById('registerForm').onsubmit = async e => {
       e.preventDefault();
-      toast('Account created! (demo)');
-      window.location.href = 'login.html';
+      const email = document.getElementById('regEmail').value.trim();
+      const password = document.getElementById('regPassword').value.trim();
+      try {
+        const res = await fetch('/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          toast('Account created!', 'success');
+          window.location.href = 'login.html';
+        } else {
+          toast(data.message || data.detail || 'Registration failed');
+        }
+      } catch (err) {
+        toast('Registration failed');
+      }
     };
   </script>
 </body>

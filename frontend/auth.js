@@ -40,13 +40,15 @@ async function handleRegister() {
     });
     const data = await res.json();
     if (res.ok) {
-      localStorage.setItem('access', data.access);
-      localStorage.setItem('refresh', data.refresh);
+      const access = data.access || data.access_token;
+      const refresh = data.refresh || data.refresh_token;
+      if (access) localStorage.setItem('access', access);
+      if (refresh) localStorage.setItem('refresh', refresh);
       closeRegister();
       toast('Welcome to FreshCart!', 'success');
       showProfile();
     } else {
-      toast(data.message || 'Registration failed', 'error');
+      toast(data.message || data.detail || 'Registration failed', 'error');
     }
   } catch (e) {
     toast('Registration failed', 'error');

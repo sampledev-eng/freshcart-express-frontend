@@ -1,26 +1,25 @@
-function setTokens() {
-  const access = { token: 'access123', exp: Date.now() + 60000 };
-  const refresh = { token: 'refresh123', exp: Date.now() + 600000 };
-  localStorage.setItem('access', JSON.stringify(access));
-  localStorage.setItem('refresh', JSON.stringify(refresh));
+// save JWT tokens returned from the backend
+function setTokens(data) {
+  if (!data) return;
+  const access = data.access || data.access_token;
+  const refresh = data.refresh || data.refresh_token;
+  if (access) localStorage.setItem('access', access);
+  if (refresh) localStorage.setItem('refresh', refresh);
 }
 
 function getToken() {
-  const access = JSON.parse(localStorage.getItem('access') || 'null');
-  if (access && access.exp > Date.now()) return access.token;
-  const refresh = JSON.parse(localStorage.getItem('refresh') || 'null');
-  if (refresh && refresh.exp > Date.now()) {
-    // simulate refresh
-    setTokens();
-    return 'access123';
-  }
+  const access = localStorage.getItem('access');
+  if (access) return access;
   return null;
 }
 
 function loginUrl() {
-  // Always redirect to the root auth login page to avoid
-  // duplicated path segments like "auth/auth/login.html".
-  return '/auth/login.html';
+  const path = window.location.pathname;
+  const base = path.includes('/frontend/') ? '/frontend/' : '/';
+  if (path.includes('/frontend/auth/') || path.includes('/auth/')) {
+    return 'login.html';
+  }
+  return base + 'auth/login.html';
 }
 
 function updateNavbarUser() {
@@ -43,38 +42,48 @@ function updateNavbarUser() {
   }
 }
 
+function logout() {
+  localStorage.removeItem('access');
+  localStorage.removeItem('refresh');
+  localStorage.removeItem('userName');
+  updateNavbarUser();
+}
+
 function showLoginForm() {
   const modal = document.getElementById('modal');
   if (!modal) { window.location.href = loginUrl(); return; }
   document.getElementById('modalBody').innerHTML = `
     <h2>Login</h2>
     <form id="loginForm" class="mobile-login">
-      <input type="text" id="mobile" placeholder="Mobile or Email" required />
-      <button type="button" id="sendOtp">Send OTP</button>
-      <div id="otpSection" class="hidden">
-        <input type="text" id="otpInput" placeholder="OTP" required />
-        <button type="submit">Verify</button>
-      </div>
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <button type="submit">Login</button>
     </form>
     <p>New user? <a href="#" id="regLink">Register here</a></p>
   `;
   modal.classList.remove('hidden');
-  document.getElementById('sendOtp').onclick = () => {
-    document.getElementById('otpSection').classList.remove('hidden');
-    toast('Demo OTP: 123456');
-  };
-  document.getElementById('loginForm').onsubmit = e => {
+  document.getElementById('loginForm').onsubmit = async e => {
     e.preventDefault();
-    const otp = document.getElementById('otpInput').value;
-    if (otp === '123456') {
-      const val = document.getElementById('mobile').value;
-      localStorage.setItem('userName', val);
-      setTokens();
-      closeModal();
-      updateNavbarUser();
-      toast('Logged in');
-    } else {
-      toast('Invalid OTP');
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        localStorage.setItem('userName', email);
+        setTokens(data);
+        closeModal();
+        updateNavbarUser();
+        toast('Logged in');
+      } else {
+        toast(data.message || data.detail || 'Login failed');
+      }
+    } catch (err) {
+      toast('Login failed');
     }
   };
   document.getElementById('regLink').onclick = e => { e.preventDefault(); showRegisterForm(); };
@@ -95,8 +104,23 @@ function showRegisterForm() {
   modal.classList.remove('hidden');
   document.getElementById('registerForm').onsubmit = e => {
     e.preventDefault();
-    toast('Account created! (demo)');
-    showLoginForm();
+    const email = document.getElementById('regEmail').value.trim();
+    const password = document.getElementById('regPassword').value.trim();
+    fetch('/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    })
+      .then(async res => {
+        const data = await res.json();
+        if (res.ok) {
+          toast('Account created!', 'success');
+          showLoginForm();
+        } else {
+          toast(data.message || data.detail || 'Registration failed');
+        }
+      })
+      .catch(() => toast('Registration failed'));
   };
   document.getElementById('loginLink').onclick = e => { e.preventDefault(); showLoginForm(); };
 }
